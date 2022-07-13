@@ -111,14 +111,16 @@ function outputResults(resultHash) {
         newPlayerScore = parseInt(currentPlayerScore) + 1
         document.querySelector("#playerScore").textContent  = newPlayerScore
         if (newPlayerScore === 5) {
-            alert('You win!')
+            setTimeout(() => { alert('You win!') }, 1)
+            removeEvents()
         }
     } else if (winner === 'computer') {
         currentComputerScore = document.querySelector("#computerScore").textContent  
         newComputerScore = parseInt(currentComputerScore) + 1
         document.querySelector("#computerScore").textContent = newComputerScore
         if (newComputerScore === 5) {
-            alert('You lose!')
+            setTimeout(() => { alert('You lose!') }, 1)
+            removeEvents()
         }
     } else {
         currentTies = document.querySelector("#ties").textContent  
@@ -129,16 +131,14 @@ function outputResults(resultHash) {
 
 function removeEvents() {
     buttons = document.querySelectorAll('button')
-    buttons.forEach(button => button.removeEventListener('click', play, true))
+    buttons.forEach(button => button.removeEventListener('click', play))
 }
 let currentPlayerScore = document.querySelector("#playerScore").textContent 
 let currentComputerScore = document.querySelector("#computerScore").textContent  
 buttons = document.querySelectorAll('button')
-buttons.forEach(button => button.addEventListener('click', play => {
-    currentPlayerScore = parseInt(document.querySelector("#playerScore").textContent )
-    currentComputerScore = parseInt(document.querySelector("#computerScore").textContent )
-    if (currentPlayerScore < 5 && currentComputerScore < 5) { //does not run if player or computer got 5 wins
-        result = playRound(button.id, computerPlay())
-        outputResults(result)
-    }
-}))
+buttons.forEach(button => button.addEventListener('click', play))
+
+function play(e) {
+    result = playRound(this.id, computerPlay())
+    outputResults(result)
+}
