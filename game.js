@@ -13,24 +13,38 @@ function computerPlay() {
 function playRound(playerSelection, computerSelection) {
     let playerMove = capitalize(playerSelection)
     let computerMove = capitalize(computerSelection)
+    let result = ''
+    let winner = 'tie'
+    let output = {}
     
     if (playerMove === computerMove) {
-        return 'Tie!'
+        result = `Tie! (${playerMove})`
+        winner = 'tie'
     } else if (playerMove === 'Rock' && computerMove === 'Paper'){
-        return 'You lose! Paper beats rock!'
+        result = 'You lose! Paper beats rock!'
+        winner = 'computer'
     } else if (playerMove === 'Rock' && computerMove === 'Scissors'){
-        return 'You win! Rock beats scissors!'
+        result = 'You win! Rock beats scissors!'
+        winner = 'player'
     } else if (playerMove === 'Paper' && computerMove === 'Scissors'){
-        return 'You lose! Scissors beats rock!'
+        result = 'You lose! Scissors beats rock!'
+        winner = 'computer'
     } else if (playerMove === 'Paper' && computerMove === 'Rock'){
-        return 'You win! Paper beats rock'
+        result = 'You win! Paper beats rock'
+        winner = 'player'
     } else if (playerMove === 'Scissors' && computerMove === 'Rock'){
-        return 'You lose! Rock beats scissors!'
+        result = 'You lose! Rock beats scissors!'
+        winner = 'computer'
     } else if (playerMove === 'Scissors' && computerMove === 'Paper'){
-        return 'You win! Scissors beats paper!'
+        result = 'You win! Scissors beats paper!'
+        winner = 'player'
     } else {
-        return 'Something went wrong!'
+        result = 'Something went wrong!'
+        winner = 'Something went wrong'
     }
+    output.result = result
+    output.winner = winner
+    return output
 }
 
 function capitalize(str) {
@@ -44,18 +58,16 @@ function game() {
     console.log('Start game:')
     let computerSelection = ''
     let playerSelection = ''
-    for (let i = 0; i < 5; i++) {
-        console.log(`Round ${i+1}:`)
-        computerSelection = computerPlay()
-        playerSelection = playerSelect()
-        if (playerSelection === 'Cancel') {
-            console.log('Game canceled!')
-            break
-        }
-        console.log(`You chose: ${playerSelection}`)
-        console.log(`Computer chose: ${computerSelection}`)
-        console.log(playRound(playerSelection, computerSelection))
-     }
+    console.log(`Round ${i+1}:`)
+    computerSelection = computerPlay()
+    playerSelection = playerSelect()
+    if (playerSelection === 'Cancel') {
+        console.log('Game canceled!')
+        // break
+    }
+    console.log(`You chose: ${playerSelection}`)
+    console.log(`Computer chose: ${computerSelection}`)
+    console.log(playRound(playerSelection, computerSelection))
     console.log('Game over!')
 }
 
@@ -86,4 +98,47 @@ function playerSelect() {
     return playerMove
 }
 
-game()
+function outputResults(resultHash) {
+    currentRound = document.querySelector("#round").innerHTML 
+    newRound = parseInt(currentRound) + 1
+    document.querySelector("#round").innerHTML = newRound
+    
+    document.querySelector("#result").innerHTML = resultHash.result
+
+    winner = resultHash.winner
+    if (winner === 'player') {
+        currentPlayerScore = document.querySelector("#playerScore").innerHTML 
+        newPlayerScore = parseInt(currentPlayerScore) + 1
+        document.querySelector("#playerScore").innerHTML = newPlayerScore
+        if (newPlayerScore === 5) {
+            alert('You win!')
+        }
+    } else if (winner === 'computer') {
+        currentComputerScore = document.querySelector("#computerScore").innerHTML 
+        newComputerScore = parseInt(currentComputerScore) + 1
+        document.querySelector("#computerScore").innerHTML = newComputerScore
+        if (newComputerScore === 5) {
+            alert('ou lose!')
+        }
+    } else {
+        currentTies = document.querySelector("#ties").innerHTML 
+        newTies = parseInt(currentTies) + 1
+        document.querySelector("#ties").innerHTML = newTies
+    }
+}
+
+function removeEvents() {
+    buttons = document.querySelectorAll('button')
+    buttons.forEach(button => button.removeEventListener('click', play, true))
+}
+let currentPlayerScore = document.querySelector("#playerScore").innerHTML
+let currentComputerScore = document.querySelector("#computerScore").innerHTML 
+buttons = document.querySelectorAll('button')
+buttons.forEach(button => button.addEventListener('click', play => {
+    currentPlayerScore = parseInt(document.querySelector("#playerScore").innerHTML)
+    currentComputerScore = parseInt(document.querySelector("#computerScore").innerHTML)
+    if (currentPlayerScore < 5 && currentComputerScore < 5) { //does not run if player or computer got 5 wins
+        result = playRound(button.id, computerPlay())
+        outputResults(result)
+    }
+}))
