@@ -133,12 +133,13 @@ function removeEvents() {
     buttons = document.querySelectorAll('button')
     buttons.forEach(button => button.removeEventListener('click', play))
 }
-let currentPlayerScore = document.querySelector("#playerScore").textContent 
-let currentComputerScore = document.querySelector("#computerScore").textContent  
-buttons = document.querySelectorAll('button')
-buttons.forEach(button => button.addEventListener('click', play))
 
 function play(e) {
     result = playRound(this.id, computerPlay())
     outputResults(result)
 }
+
+let currentPlayerScore = document.querySelector("#playerScore").textContent 
+let currentComputerScore = document.querySelector("#computerScore").textContent  
+buttons = document.querySelectorAll('button')
+buttons.forEach(button => button.addEventListener('click', play))
