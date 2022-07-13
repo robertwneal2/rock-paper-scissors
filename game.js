@@ -118,7 +118,7 @@ function outputResults(resultHash) {
         newComputerScore = parseInt(currentComputerScore) + 1
         document.querySelector("#computerScore").innerHTML = newComputerScore
         if (newComputerScore === 5) {
-            alert('ou lose!')
+            alert('You lose!')
         }
     } else {
         currentTies = document.querySelector("#ties").innerHTML 
